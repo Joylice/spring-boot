@@ -1,0 +1,9 @@
+.log
+.gradle
+/build
+.idea
+/gradle
+bower_components
+*.jar
+
+
