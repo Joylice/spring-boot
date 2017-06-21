@@ -1,24 +1,24 @@
 package com.example.mybatis.model;
 
+import com.example.mybatis.common.ApplicationUtil;
+import com.example.mybatis.dao.mapper.UserAuthorityMapper;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
 import java.util.List;
 
 /**
  * Created by cuiyy on 2017/6/9.
  */
-public class User {
-    private  Integer id;
-    private  String name;
-    private  String pwd;
-    private List<Role> roles;
-
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
-    }
-
+@JsonIgnoreProperties(value = "authorities", allowGetters = true)
+public class User implements UserDetails {
+    private Integer id;
+    private String username;
+    private String password;
 
     public Integer getId() {
         return id;
@@ -28,19 +28,50 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+
+    @Override
+    @JsonIgnoreProperties(ignoreUnknown = true, allowGetters = true)
+    public Collection getAuthorities() {
+        Collection<Authority> authorities = ApplicationUtil.getBean(UserAuthorityMapper.class).findByUserId(id);
+        return authorities;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    @JsonIgnore
+    public String getPassword() {
+        return password;
     }
 
-    public String getPwd() {
-        return pwd;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public void setPwd(String pwd) {
-        this.pwd = pwd;
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

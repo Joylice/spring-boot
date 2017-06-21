@@ -1,9 +1,8 @@
 package com.example.mybatis.security;
 
 import com.example.mybatis.dao.mapper.UserMapper;
-import com.example.mybatis.model.Role;
+import com.example.mybatis.model.Authority;
 import com.example.mybatis.model.User;
-import org.codehaus.groovy.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,12 +32,6 @@ public class CustomUserService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("用户不存在！");
         }
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        //用于添加用户的权限，只要把用户权限添加到authorities
-        for (Role r : user.getRoles()) {
-            authorities.add(new SimpleGrantedAuthority(r.getName()));
-            System.out.println(r.getName());
-        }
-        return new org.springframework.security.core.userdetails.User(user.getName(), user.getPwd(), authorities);
+        return user;
     }
 }
