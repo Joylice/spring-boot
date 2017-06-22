@@ -5,5 +5,8 @@
 /gradle
 bower_components
 *.jar
+src/main/gen
+src/main/java/auth/domain
+
 
 

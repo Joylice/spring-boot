@@ -1,11 +1,10 @@
-package com.example.mybatis.dao.mapper;
+package com.mybatis.dao.mapper;
 
-import com.example.mybatis.model.Authority;
+import com.mybatis.model.Authority;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Created by cuiyy on 2017/6/20.

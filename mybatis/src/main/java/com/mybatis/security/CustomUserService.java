@@ -1,18 +1,13 @@
-package com.example.mybatis.security;
+package com.mybatis.security;
 
-import com.example.mybatis.dao.mapper.UserMapper;
-import com.example.mybatis.model.Authority;
-import com.example.mybatis.model.User;
+import com.mybatis.dao.mapper.UserMapper;
+import com.mybatis.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by cuiyy on 2017/6/12.

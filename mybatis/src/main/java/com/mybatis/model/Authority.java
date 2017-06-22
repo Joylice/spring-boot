@@ -1,4 +1,4 @@
-package com.example.mybatis.model;
+package com.mybatis.model;
 
 import org.springframework.security.core.GrantedAuthority;
 

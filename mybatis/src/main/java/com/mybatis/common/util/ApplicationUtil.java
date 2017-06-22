@@ -1,4 +1,4 @@
-package com.example.mybatis.common;
+package com.mybatis.common.util;
 
 
 import org.apache.ibatis.session.SqlSessionFactory;
