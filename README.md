@@ -2,4 +2,4 @@
 learn  test  just do it
 
 
-技术路线  mybatis-->annotation;spring-security;
+技术路线  mybatis-->annotation;spring-security;mybatis-generator;
