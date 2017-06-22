@@ -56,7 +56,7 @@ dependencies {
  * http://wiki.jikexueyuan.com/project/gradle-2-user-guide/using-ant-from-gradle.html
  * 理解
  */
-task mybatisGenerate_auth << {
+task mybatisGenerator_core << {
     def moduleName = name.substring(name.lastIndexOf("_") + 1, name.length())
     def properties = new Properties()
     file("src/main/resources/application.properties").withInputStream {
