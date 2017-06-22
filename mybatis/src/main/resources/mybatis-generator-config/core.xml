@@ -31,8 +31,8 @@
             <!-- 可以为所有生成的接口添加一个父接口，但是MBG只负责生成，不负责检查-->
             <property name="rootInterface" value="com.mybatis.common.mapper.BaseMapper"/>
         </javaClientGenerator>
-        <table tableName="user" domainObjectName="User"/>
-        <table tableName="authority" domainObjectName="Authority"/>
+        <!--<table tableName="user" domainObjectName="User"/>-->
+        <!--<table tableName="authority" domainObjectName="Authority"/>-->
         <table tableName="user_authority" domainObjectName="UserAuthority"/>
         <table tableName="menu" domainObjectName="menu"/>
         <table tableName="menu_authority" domainObjectName="MenuAuthority"/>

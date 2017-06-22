@@ -1,4 +1,4 @@
-package com.mybatis.model;
+package com.mybatis.core.domain;
 
 /**
  * Created by cuiyy on 2017/6/9.

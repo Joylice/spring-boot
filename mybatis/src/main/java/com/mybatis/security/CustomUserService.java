@@ -1,7 +1,7 @@
 package com.mybatis.security;
 
-import com.mybatis.dao.mapper.UserMapper;
-import com.mybatis.model.User;
+import com.mybatis.core.domain.User;
+import com.mybatis.core.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

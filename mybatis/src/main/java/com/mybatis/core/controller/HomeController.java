@@ -1,6 +1,8 @@
-package com.mybatis.controller;
+package com.mybatis.core.controller;
 
-import com.mybatis.model.Message;
+import com.mybatis.core.service.UserService;
+import com.mybatis.core.domain.Message;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,8 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class HomeController {
+    @Autowired
+    UserService userService;
+
     @RequestMapping("/")
     public String index(Model model) {
+       // userService.test();
         Message msg = new Message("测试标题", "测试内容", "额外信息，只对管理员显示");
         model.addAttribute("msg", msg);
         return "home";
