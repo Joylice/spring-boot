@@ -17,7 +17,6 @@ public class HomeController {
 
     @RequestMapping("/")
     public String index(Model model) {
-        System.out.println(userService.getUserDetail());
         Message msg = new Message("测试标题", "测试内容", "额外信息，只对管理员显示");
         model.addAttribute("msg", msg);
         return "home";
