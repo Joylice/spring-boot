@@ -1,6 +1,8 @@
 package com.mybatis.core.mapper;
 
+import com.mybatis.common.mapper.BaseMapper;
 import com.mybatis.core.domain.Authority;
+import com.mybatis.core.domain.UserAuthority;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -10,7 +12,7 @@ import java.util.Collection;
  * Created by cuiyy on 2017/6/20.
  */
 @Mapper
-public interface UserAuthorityMapper extends com.mybatis.gen.core.mapper.UserAuthorityMapper {
+public interface UserAuthorityMapper extends BaseMapper<UserAuthority> {
     //获取用户信息及角色
     @Select({"select r.* from" +
             " user_authority ua  " +

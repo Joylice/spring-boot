@@ -4,15 +4,18 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <!-- 配置生成器 -->
 <generatorConfiguration>
-
-    <context id="mysql" defaultModelType="flat" targetRuntime="MyBatis3Simple" >
+    <context id="mysql" defaultModelType="flat" targetRuntime="MyBatis3Simple">
         <property name="autoDelimitKeywords" value="false"/>
         <property name="javaFileEncoding" value="UTF-8"/>
         <property name="javaFormatter" value="org.mybatis.generator.api.dom.DefaultJavaFormatter"/>
         <property name="xmlFormatter" value="org.mybatis.generator.api.dom.DefaultXmlFormatter"/>
         <property name="beginningDelimiter" value="`"/>
         <property name="endingDelimiter" value="`"/>
-        <jdbcConnection driverClass="${driverClass}" connectionURL="${connectionUrl}" userId="${username}" password="${password}"/>
+        <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+            <property name="mappers" value="com.mybatis.common.mapper.BaseMapper"/>
+        </plugin>
+        <jdbcConnection driverClass="${driverClass}" connectionURL="${connectionUrl}" userId="${username}"
+                        password="${password}"/>
         <javaTypeResolver type="org.mybatis.generator.internal.types.JavaTypeResolverDefaultImpl">
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
@@ -25,17 +28,19 @@
             <property name="rootClass" value="com.mybatis.common.domain.BaseDomain"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
+        <!--<sqlMapGenerator targetPackage="mapper"  targetProject="src/main/resources"/>-->
         <!--注意，如果context是MyBatis3Simple：只支持ANNOTATEDMAPPER和XMLMAPPER-->
-        <javaClientGenerator targetPackage="com.mybatis.gen.${module_name}.mapper" type="ANNOTATEDMAPPER" targetProject="${src_main_gen}">
-            <property name="enableSubPackages" value="false"/>
-            <!-- 可以为所有生成的接口添加一个父接口，但是MBG只负责生成，不负责检查-->
-            <property name="rootInterface" value="com.mybatis.common.mapper.BaseMapper"/>
-        </javaClientGenerator>
+        <!--<javaClientGenerator targetPackage="com.mybatis.gen.${module_name}.mapper" type="ANNOTATEDMAPPER"-->
+                             <!--targetProject="${src_main_gen}">-->
+            <!--<property name="enableSubPackages" value="false"/>-->
+            <!--&lt;!&ndash; 可以为所有生成的接口添加一个父接口，但是MBG只负责生成，不负责检查&ndash;&gt;-->
+            <!--&lt;!&ndash;<property name="rootInterface" value="com.mybatis.common.mapper.BaseMapper"/>&ndash;&gt;-->
+        <!--</javaClientGenerator>-->
         <!--<table tableName="user" domainObjectName="User"/>-->
         <!--<table tableName="authority" domainObjectName="Authority"/>-->
-        <table tableName="user_authority" domainObjectName="UserAuthority"/>
-        <table tableName="menu" domainObjectName="menu"/>
-        <table tableName="menu_authority" domainObjectName="MenuAuthority"/>
+        <!--<table tableName="user_authority" domainObjectName="UserAuthority"/>-->
+        <!--<table tableName="menu" domainObjectName="Menu"/>-->
+        <!--<table tableName="menu_authority" domainObjectName="MenuAuthority"/>-->
         <table tableName="request_map" domainObjectName="RequestMap"/>
     </context>
 </generatorConfiguration>

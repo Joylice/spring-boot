@@ -1,5 +1,6 @@
 package com.mybatis.core.mapper;
 
+import com.mybatis.common.mapper.BaseMapper;
 import com.mybatis.core.domain.User;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
@@ -8,7 +9,7 @@ import org.apache.ibatis.type.JdbcType;
  * Created by cuiyy on 2017/6/14.
  */
 @Mapper
-public interface UserMapper extends com.mybatis.gen.core.mapper.UserMapper {
+public interface UserMapper extends BaseMapper<User> {
 
     /**
      * 实体类 属性与sql语句中字段别名一致，也可匹配赋值成功，但不适合1对多
