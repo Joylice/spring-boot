@@ -38,4 +38,6 @@ INSERT INTO request_map(id, version, delete_flag, valid_flag, sort, url, authori
 INSERT INTO request_map(id, version, delete_flag, valid_flag, sort, url, authority) VALUES ('6263656424509804667', 0, false, true, 100, '/bridge/publicInfo/**', 'permitAll');
 INSERT INTO request_map(id, version, delete_flag, valid_flag, sort, url, authority) VALUES ('6263656424509804668', 0, false, true, 100, '/bridge/publicRt/**', 'permitAll');
 INSERT INTO request_map(id, version, delete_flag, valid_flag, sort, url, authority) VALUES ('6263656424509804669', 0, false, true, 100, '/menu/state/**', 'permitAll');
+#menu
+INSERT INTO menu (id, version, delete_flag, valid_flag, sort, name, label, url, icon, style, cls, abstraction, views, active, resolve, force_hide, parent_id) VALUES ('6273227603415404544', 0, false, true, 300, 'signin', 'menu.signin', '/signin', null, null, null, false, '{"@":{"templateUrl":"/scripts/core/templates/signin.html","controller":"AuthCtrl"}}', false, null, null, '6273227603394433024');
 

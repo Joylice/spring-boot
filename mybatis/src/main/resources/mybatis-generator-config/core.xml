@@ -11,9 +11,9 @@
         <property name="xmlFormatter" value="org.mybatis.generator.api.dom.DefaultXmlFormatter"/>
         <property name="beginningDelimiter" value="`"/>
         <property name="endingDelimiter" value="`"/>
-        <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
-            <property name="mappers" value="com.mybatis.common.mapper.BaseMapper"/>
-        </plugin>
+        <!--<plugin type="tk.mybatis.mapper.generator.MapperPlugin">-->
+            <!--<property name="mappers" value="com.mybatis.common.mapper.BaseMapper"/>-->
+        <!--</plugin>-->
         <jdbcConnection driverClass="${driverClass}" connectionURL="${connectionUrl}" userId="${username}"
                         password="${password}"/>
         <javaTypeResolver type="org.mybatis.generator.internal.types.JavaTypeResolverDefaultImpl">
@@ -30,17 +30,17 @@
         </javaModelGenerator>
         <!--<sqlMapGenerator targetPackage="mapper"  targetProject="src/main/resources"/>-->
         <!--注意，如果context是MyBatis3Simple：只支持ANNOTATEDMAPPER和XMLMAPPER-->
-        <!--<javaClientGenerator targetPackage="com.mybatis.gen.${module_name}.mapper" type="ANNOTATEDMAPPER"-->
-                             <!--targetProject="${src_main_gen}">-->
-            <!--<property name="enableSubPackages" value="false"/>-->
-            <!--&lt;!&ndash; 可以为所有生成的接口添加一个父接口，但是MBG只负责生成，不负责检查&ndash;&gt;-->
-            <!--&lt;!&ndash;<property name="rootInterface" value="com.mybatis.common.mapper.BaseMapper"/>&ndash;&gt;-->
-        <!--</javaClientGenerator>-->
-        <!--<table tableName="user" domainObjectName="User"/>-->
-        <!--<table tableName="authority" domainObjectName="Authority"/>-->
-        <!--<table tableName="user_authority" domainObjectName="UserAuthority"/>-->
-        <!--<table tableName="menu" domainObjectName="Menu"/>-->
-        <!--<table tableName="menu_authority" domainObjectName="MenuAuthority"/>-->
+        <javaClientGenerator targetPackage="com.mybatis.gen.${module_name}.mapper" type="ANNOTATEDMAPPER"
+                             targetProject="${src_main_gen}">
+            <property name="enableSubPackages" value="false"/>
+            <!-- 可以为所有生成的接口添加一个父接口，但是MBG只负责生成，不负责检查-->
+            <property name="rootInterface" value="com.mybatis.common.mapper.BaseMapper"/>
+        </javaClientGenerator>
+        <table tableName="user" domainObjectName="User"/>
+        <table tableName="authority" domainObjectName="Authority"/>
+        <table tableName="user_authority" domainObjectName="UserAuthority"/>
+        <table tableName="menu" domainObjectName="Menu"/>
+        <table tableName="menu_authority" domainObjectName="MenuAuthority"/>
         <table tableName="request_map" domainObjectName="RequestMap"/>
     </context>
 </generatorConfiguration>

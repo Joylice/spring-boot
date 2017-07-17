@@ -1,6 +1,9 @@
 package com.mybatis.conf;
 
+import com.mybatis.core.domain.RequestMap;
+import com.mybatis.core.mapper.RequestMapMapper;
 import com.mybatis.security.CustomUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -9,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
@@ -18,6 +22,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 @EnableWebSecurity//禁用Boot的默认Security配置
 @EnableGlobalMethodSecurity(prePostEnabled = true)//启用Security注解
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    RequestMapMapper requestMapMapper;
 
     @Bean
     UserDetailsService customUserService() {
@@ -54,16 +61,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeRequests()
-                .anyRequest().authenticated()//任何请求，必须登录
-                .antMatchers("/home/**").hasRole("ADMIN")
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .failureUrl("/login?error")
-                .permitAll().defaultSuccessUrl("/", true)//登录页面用户任意访问
-                .and()
-                .logout().permitAll();//注销行为任意访问
+        ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry urlRegistry = http.authorizeRequests();
+        for (RequestMap requestMap : requestMapMapper.selectAll()) {
+            if (requestMap.getAuthority().contains("permitAll")) {
+                urlRegistry.antMatchers(requestMap.getUrl()).permitAll();
+            } else {
+                urlRegistry.antMatchers(requestMap.getUrl()).hasRole(requestMap.getAuthority());
+            }
+        }
+        urlRegistry.anyRequest().permitAll();
+        http.csrf().disable();
+        // http.exceptionHandling().authenticationEntryPoint(authEntryPoint);
+        http.headers().frameOptions().sameOrigin();
+        http.formLogin()
+                .loginProcessingUrl("/signin")
+                .loginPage("/index.html")
+                .usernameParameter("username")
+                .passwordParameter("password");
+        // .successHandler(authSuccessHandler)
+        // .failureHandler(authFailureHandler);
+
+        http.logout()
+                .logoutUrl("/signout")
+                .deleteCookies("remember-me")
+                .logoutSuccessUrl("/index.html");
+        http.rememberMe();
     }
 }

@@ -9,14 +9,14 @@ import org.apache.ibatis.type.JdbcType;
  * Created by cuiyy on 2017/6/14.
  */
 @Mapper
-public interface UserMapper extends BaseMapper<User> {
+public interface UserMapper {
 
     /**
      * 实体类 属性与sql语句中字段别名一致，也可匹配赋值成功，但不适合1对多
      *
      * @Result(property = "roleName",column = "roleName")
-     * 根据字段username many去查询权限列表，适配实体类User-->List<Authority>
-     * one 去查询单个权限实体，适配实体类User--> Authority
+     * 根据字段username many去查询权限列表，适配实体类User-->List<Authority1>
+     * one 去查询单个权限实体，适配实体类User--> Authority1
      * @Result(property = "roles", column = "name",javaType = List.class,
      * many = @Many(select = "com.example.mybatis.dao.mapper.RoleMapper.findByUserName"))
      **/

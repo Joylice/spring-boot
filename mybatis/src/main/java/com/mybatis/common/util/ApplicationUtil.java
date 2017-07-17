@@ -1,6 +1,8 @@
 package com.mybatis.common.util;
 
-
+import com.mybatis.common.domain.BaseDomain;
+import com.mybatis.common.mapper.BaseMapper;
+import com.mybatis.common.service.BaseService;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
@@ -135,5 +137,112 @@ public class ApplicationUtil implements ApplicationContextAware {
             bean = (T) getBean(beanName);
         }
         return bean;
+    }
+
+    /**
+     * 根据domain类获取对应的Service Bean，如没获取到，则动态注册一个名为domainService的bean
+     *
+     * @param <T>
+     * @param clazz
+     * @return
+     */
+    public static <T extends BaseDomain> BaseService<T> getServiceBean(Class<? extends T> clazz) {
+
+        BaseService<T> baseService = null;
+        String beanName = getServiceName((Class<? extends BaseDomain>) clazz);
+        try {
+            baseService = (BaseService) ApplicationUtil.getBean(beanName);
+            log.debug("getServiceBean," + baseService.toString());
+        } catch (NoSuchBeanDefinitionException exception) {
+
+            log.debug("register Service, " + exception.getBeanName());
+            String className = getMapperNameFromGenPackage((Class<? extends BaseDomain>) clazz);
+
+            Class<? extends BaseMapper> mapperClass = null;
+            try {
+                mapperClass = (Class<? extends BaseMapper>) applicationContext.getClassLoader().loadClass(className);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                log.debug("ClassNotFoundException: " + mapperClass);
+            }
+
+            if (mapperClass != null) {
+                if (!sqlSessionFactory.getConfiguration().hasMapper(mapperClass)) {
+                    sqlSessionFactory.getConfiguration().addMapper(mapperClass);
+                }
+                HashMap<String, Object> properties = new HashMap<>();
+                properties.put("baseMapper", sqlSessionTemplate.getMapper(mapperClass));
+                baseService = registerBean(exception.getBeanName(), BaseService.class, properties, false);
+            }
+
+        }
+        return baseService;
+    }
+
+
+    /**
+     * 根据domain类获取对应的Mapper Bean，如没获取到，则动态注册一个名为domainMapper的bean
+     *
+     * @param clazz
+     * @param <T>
+     * @return
+     */
+    public static <T> BaseMapper<T> getMapperBean(Class<? extends T> clazz) {
+        BaseMapper baseMapper = null;
+        String beanName = getMapperName((Class<? extends BaseDomain>) clazz);
+        try {
+            baseMapper = (BaseMapper) ApplicationUtil.getBean(beanName);
+            log.debug("getMapperBean," + baseMapper.toString());
+
+        } catch (NoSuchBeanDefinitionException exception) {
+            String className = getMapperNameFromGenPackage((Class<? extends BaseDomain>) clazz);
+
+            Class<? extends BaseMapper> mapperClass = null;
+            try {
+                mapperClass = (Class<? extends BaseMapper>) applicationContext.getClassLoader().loadClass(className);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                log.debug("ClassNotFoundException: " + mapperClass);
+            }
+            if (mapperClass != null) {
+                if (!sqlSessionFactory.getConfiguration().hasMapper(mapperClass)) {
+                    sqlSessionFactory.getConfiguration().addMapper(mapperClass);
+                }
+                baseMapper = sqlSessionTemplate.getMapper(mapperClass);
+            }
+        }
+
+        return baseMapper;
+    }
+
+
+    /**
+     * @param clazz
+     * @return
+     */
+    private static String getServiceName(Class<? extends BaseDomain> clazz) {
+        String serviceName = clazz.getSimpleName() + "Service";
+        char[] tempCharArray = serviceName.toCharArray();
+        tempCharArray[0] = new String(new char[]{tempCharArray[0]}).toLowerCase().toCharArray()[0];
+        return new String(tempCharArray);
+    }
+
+    private static String getMapperName(Class<? extends BaseDomain> clazz) {
+        String serviceName = clazz.getSimpleName() + "Mapper";
+        char[] tempCharArray = serviceName.toCharArray();
+        tempCharArray[0] = new String(new char[]{tempCharArray[0]}).toLowerCase().toCharArray()[0];
+        return new String(tempCharArray);
+    }
+
+    /**
+     * 根据Domain获取com.bms.gen目录下mybatis generator生成的Mapper接口类名
+     * <p>
+     * com.bms.core.mapper.Domain > com.bms.gen.core.mapper.DomainMapper
+     *
+     * @param clazz
+     * @return
+     */
+    private static String getMapperNameFromGenPackage(Class<? extends BaseDomain> clazz) {
+        return new StringBuffer("com.bms.gen.").append(clazz.getPackage().getName().substring(8, clazz.getPackage().getName().lastIndexOf("."))).append(".mapper.").append(clazz.getSimpleName()).append("Mapper").toString();
     }
 }
