@@ -1,4 +1,4 @@
-package com.example;
+package com.example.poi;
 
 import java.util.Date;
 
