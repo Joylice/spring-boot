@@ -48,10 +48,6 @@
     }]);
     bmsApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise('/');
-        //angular.forEach(window.menuData, function (menu) {
-        //    var config = angular.merge({}, menu, {});
-        //    $stateProvider.state(config);
-        //});
         $.ajax({
             async: false,
             url: '/menu/state',

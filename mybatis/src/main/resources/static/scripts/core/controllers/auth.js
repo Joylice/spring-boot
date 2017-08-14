@@ -76,35 +76,7 @@
             for (var i = 0; i < backIamges.length; i++) {
                 $scope.addSlide(i);
             }
-
-            // //轮播
-            // $scope.activeTabIndex=-1;
-            // if($scope.status.bridges.length>1){
-            //     var bg_Rotate = null;
-            //     var bg_Rotate_bridge = function () {
-            //         if(bg_Rotate !== null){
-            //             $timeout.cancel(bg_Rotate);
-            //         }
-            //         //轮播的循环
-            //         if($scope.activeTabIndex >= $scope.status.bridges.length-1){
-            //             $scope.activeTabIndex=-1;
-            //         }
-            //         $scope.activeTabIndex = $scope.activeTabIndex+1;
-            //         $scope.bridge_back_image = backIamges[$scope.activeTabIndex];
-            //         bg_Rotate = $timeout(bg_Rotate_bridge, 6000);
-            //     }
-            //     bg_Rotate_bridge();
-            // }
-            // else if($scope.status.bridges.length ==1){
-            //     $scope.bridge_back_image = backIamges[0];
-            // }
         });
-        // $scope.select = function (bridge,index) {
-        //     $scope.status.current = bridge;
-        //     $scope.activeTabIndex = index;
-        //     $scope.bridge_back_image = backIamges[index];
-        // }
-
         $scope.$watch('status.current', function (value, oldValue) {
             if(value !== oldValue){
                 updateRtData();
