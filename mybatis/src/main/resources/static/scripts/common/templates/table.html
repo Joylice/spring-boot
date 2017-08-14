@@ -1,0 +1,24 @@
+<div class="list">
+    <table class="table table-striped">
+        <thead>
+        <tr class="item">
+            <th ng-repeat="column in status.columns"
+                ng-if="(status.list.table.columns.length == 0 || status.list.table.columns == null ||  status.list.table.columns.indexOf(column.name))!==-1 && (column.list != false)"
+                uib-table-sort="column.name" uib-table-on-sort="status.list.table.onSort" uib-table-sort-order="status.list.table.sortOrder" style="cursor: pointer">
+                {{column.title}}
+                <i ng-if ="column.sortable && !startOrder" class="fa fa-sort"></i>
+                <i ng-if="column.sortable && status.list.table.sortOrder =='asc'&& startOrder"  class="fa fa-sort-asc" style="vertical-align: bottom"></i>
+                <i ng-if="column.sortable && status.list.table.sortOrder =='desc' && startOrder"  class="fa fa-sort-desc" style="vertical-align: top" ></i>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="item" ng-repeat="obj in status.list.table.data">
+            <td ng-repeat="column in status.columns track by $index" style="max-width: 200px"
+                ng-if="(status.list.table.columns.length == 0 || status.list.table.columns == null ||  status.list.table.columns.indexOf(column.name))!==-1 && (column.list != false)">
+                <div uib-form-list="column" ng-model="obj[column.name]"></div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

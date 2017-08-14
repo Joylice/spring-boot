@@ -4,7 +4,7 @@
 (function (window,angular) {
    var common=angular.module('common',[]);
 
-   common.service('BaseService',['$rootScope','$resource','$q','T',function ($rootScope,$resource,$q,T) {
+   common.service('BaseService',['$rootScope','$resource','$q',function ($rootScope,$resource,$q) {
        return{
            /**
             * 数据列表查询
@@ -38,5 +38,4 @@
            }
        }
    }])
-
 })(window,angular);

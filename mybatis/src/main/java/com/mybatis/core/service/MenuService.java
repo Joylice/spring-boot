@@ -33,7 +33,7 @@ public class MenuService extends BaseService<Menu> {
 
             ObjectNode objectNode = JsonUtil.getObjectMapper().createObjectNode();
 
-            objectNode.put("name", menu.getLabel());
+            objectNode.put("name", menu.getName());
 
             if (menu.getLabel() != null) {
                 objectNode.put("label", menu.getLabel());

@@ -1,0 +1,32 @@
+<div class="show">
+    <ol class="content-header breadcrumb">
+        <li>{{ status.label }}{{'show.label'|T}}</li>
+    </ol>
+    <div class="content-toolbar" ng-if="status.show.toolbar.active != false">
+        <button ng-repeat="button in status.show.toolbar.buttons | orderBy:'sort'" class="fa pull-right"
+                ng-if="button.active != false"
+                ng-class="button.cls" ng-click="button.onClick()">{{button.name}}
+        </button>
+        <div class="clearfix"></div>
+    </div>
+    <div class="content-show form-horizontal">
+        <div class="form-group" ng-repeat="column in status.columns"
+             ng-if="(status.show.columns.length == 0 || status.show.columns == null ||  status.show.columns.indexOf(column.name))!==-1 && (column.show != false)">
+            <div uib-form-show="column" name="myShowForm" ng-model="status.show.model[column.name]"></div>
+        </div>
+
+        <!-- 扩展属性-->
+        <div class="form-group" ng-repeat="model in status.show.extends.model">
+            <label class="col-sm-2 control-label">{{model.key}}</label>
+            <span class="col-md-8 col-sm-3 form-show-content">
+                <span class="show-control">{{model.value}}</span>
+            </span>
+        </div>
+    </div>
+    <div class="content-toolbar">
+        <button ng-repeat="button in status.show.bottom.buttons | orderBy:'sort'" class="fa pull-right"
+                ng-class="button.cls" ng-click="button.onClick()">{{button.name}}
+        </button>
+        <div class="clearfix"></div>
+    </div>
+</div>

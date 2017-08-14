@@ -2,7 +2,8 @@
  * Created by cuiyy on 2017/6/27.
  */
 (function (window, angular) {
-    var core = angular.module("core");
+    'use strict';
+    var core = angular.module("core", []);
     core.factory('principal', ['$q', '$http', '$timeout', 'BaseService', '$rootScope', function ($q, $http, $timeout, service, $rootScope) {
         var _identity = undefined,
             _authenticated = false;
@@ -98,4 +99,4 @@
             };
         }
     ]);
-})
+})(window, angular);

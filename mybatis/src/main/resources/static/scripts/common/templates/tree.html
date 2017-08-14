@@ -1,0 +1,14 @@
+<div class="tree">
+    <div class="modal-body" id="modal-body">
+        <div class="row">
+            <div class="col-sm-10 allTree" style="margin-top: 20px">
+            <div class="treeTopbody tree-toolbar">
+            <button ng-repeat="button in status.tree.toolbar.buttons | orderBy:'sort'" type="submit"
+            ng-class="button.cls" ng-click="button.onClick()">{{button.name}}
+            </button></div>
+            <ul ztree ztree-setting="ztreeSetting" ztree-options="ztreeData" ng-model="status.value" ztree-id="status.ztreeId"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+

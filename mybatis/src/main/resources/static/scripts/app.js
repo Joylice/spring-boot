@@ -1,9 +1,9 @@
 /**
  * Created by cuiyy on 2017/6/27.
  */
-(function (window, angular) {
-    var bmsApp = angular.module('bmsApp');
-
+;(function (window, angular) {
+    'use strict';
+    var bmsApp = angular.module('bmsApp', ['common','core', 'ui.router', 'ngResource']);
     bmsApp.config(['$httpProvider', function ($httpProvider) {
         $httpProvider.interceptors.push(['$q', '$rootScope', function ($q, $rootScope) {
             return {
@@ -48,6 +48,10 @@
     }]);
     bmsApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise('/');
+        //angular.forEach(window.menuData, function (menu) {
+        //    var config = angular.merge({}, menu, {});
+        //    $stateProvider.state(config);
+        //});
         $.ajax({
             async: false,
             url: '/menu/state',

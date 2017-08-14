@@ -69,7 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 urlRegistry.antMatchers(requestMap.getUrl()).hasRole(requestMap.getAuthority());
             }
         }
-        urlRegistry.anyRequest().permitAll();
+        urlRegistry.anyRequest().authenticated();
         http.csrf().disable();
         // http.exceptionHandling().authenticationEntryPoint(authEntryPoint);
         http.headers().frameOptions().sameOrigin();
