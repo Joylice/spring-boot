@@ -12,9 +12,10 @@
             signingin: false,
             signinErrMsg: "",
             bridges: [],
-            current: undefined
+            current: undefined,
+            username: '',
+            password: ''
         };
-        $scope.bridge_back_image="";
         var backIamges = [];
 
         service.getAll("bridge", {action: "publicInfo"}).then(function (response) {
@@ -55,6 +56,7 @@
                 $scope.status.current = $scope.status.bridges[0];
             }
 
+            //轮播的参数配置
             $scope.myInterval = 5000;
             $scope.noWrapSlides = false;
             $scope.active = 0;
@@ -68,61 +70,39 @@
                     id: currIndex++
                 });
             };
-            $scope.randomize = function() {
-                var indexes = generateIndexesArray();
-                assignNewIndexesToSlides(indexes);
-            };
-
             for (var i = 0; i < backIamges.length; i++) {
                 $scope.addSlide(i);
             }
-        });
-        $scope.$watch('status.current', function (value, oldValue) {
-            if(value !== oldValue){
-                updateRtData();
-            }
-        });
 
-        $scope.$on("$destroy", function () {
-            if(timeout !== null){
-                $timeout.cancel(timeout);
-            }
         });
-
-        var timeout = null;
-        function updateRtData(){
-            if(timeout !== null){
-                $timeout.cancel(timeout);
-            }
-            if(!angular.isObject($scope.status.current)){
-                return;
-            }
-            service.get("bridge", {action: "publicRt", id: $scope.status.current.id}).then(function (response) {
-                $scope.status.current.rtData = response.data;
-                timeout = $timeout(updateRtData, rtInterval);
-            });
-        }
         $scope.signin = function () {
             $scope.status.signingin = true;
             authService.signin({
-                rememberme: this.rememberme,
-                username: this.username,
-                password: this.password
+                rememberme: $scope.rememberme,
+                username: $scope.status.username,
+                password: $scope.status.password
             }, function (response) {
                 $scope.status.signinErrMsg = '';
 
                 //登录成功后，初始化登录的用户信息和UI配置信息
-                $q.all([service.get("user", {action: "me"}), service.selectAll("uiConfig")]).then(function (dataArr) {
+                $q.all([service.get("user", {action: "me"}), service.selectAll("uiConfig"), service.selectAll("config")]).then(function (dataArr) {
                     var myInfo = dataArr[0].data;
-                    var configArr = dataArr[1].data;
+                    var uiConfigArr = dataArr[1].data;
+                    var configArr = dataArr[2].data;
 
                     $rootScope.currentUser = myInfo;
 
-                    var config = {};
-                    for (var i = 0; i < configArr.length; i++) {
-                        config[configArr[i].key] = configArr[i].value;
+                    var uiConfig = {};
+                    for (var i = 0; i < uiConfigArr.length; i++) {
+                        uiConfig[uiConfigArr[i].key] = uiConfigArr[i].value;
                     }
-                    $rootScope.uiConfig = config;
+                    $rootScope.uiConfig = uiConfig;
+
+                    var config = {};
+                    for (var k = 0; k < configArr.length; k++) {
+                        config[configArr[k].key] = configArr[k].value;
+                    }
+                    $rootScope.config = config;
 
                     principal.authenticate(myInfo);
                     if ($scope.returnToState) {

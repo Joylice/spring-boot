@@ -1,0 +1,24 @@
+<div id="allbody" class="bms {{currentState.name}}">
+    <div ng-if="!currentUser.forIframe" ui-view="header" class="bms-header" style="background-image: url({{uiConfig.HeaderImage}})"></div>
+    <div class="clearfix"></div>
+    <div ui-view="main"  class="bms-main" ng-class="{'no-header': nav.header.items.length == 0, 'no-left': nav.left.items.length == 0}"></div>
+    <div class="clearfix"></div>
+    <div ng-if="!currentUser.forIframe" id="bms-footer" ui-view="footer" class="bms-footer"></div>
+    <!--<h2 translate="TITLE" class="ng-isolate-scope">Hello</h2>-->
+    <!--<p translate="FOO" class="ng-isolate-scope">this is a paragrahpy</p>-->
+    <!--<button class="btn ng-scope" ng-click="changeLanguage('en')" translate="BUTTON_LANG_EN">english</button>-->
+    <!--<button class="btn ng-scope" ng-click="changeLanguage('de')" translate="BUTTON_LANG_DE">german</button>-->
+
+    <script type="text/ng-template" id="alert.html">
+        <div ng-transclude></div>
+    </script>
+
+    <div class="bms-alert">
+        <div uib-alert ng-repeat="a in alert.alerts" ng-class="'alert-' + (a.type || 'warning')"  close="alert.close($index)" dismiss-on-timeout="{{a.dismissOnTimeout}}">{{a.msg}}</div>
+    </div>
+
+
+
+
+
+</div>

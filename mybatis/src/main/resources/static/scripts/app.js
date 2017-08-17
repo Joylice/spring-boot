@@ -1,19 +1,62 @@
 /**
- * Created by cuiyy on 2017/6/27.
+ * Created by zhe on 6/27/16.
  */
+
 ;(function (window, angular) {
     'use strict';
-    var bmsApp = angular.module('bmsApp', ['common','core', 'ui.router', 'ngResource']);
+
+    var bmsApp = angular.module('bmsApp', ['common', 'core',  'pascalprecht.translate', 'ui.router', 'ui.bootstrap', 'ui.bootstrap.ext', 'ui.tree', 'ngResource', 'angularFileUpload',  'ngAnimate','ngSanitize']);
+    //国际化配置
+    bmsApp.filter("T", ['$translate', function ($translate) {
+        return function (key) {
+            if (key) {
+                return $translate.instant(key);
+            }
+        };
+    }]);
+    bmsApp.factory('T', ['$translate', function ($translate) {
+        var T = {};
+        T.T = function (key) {
+            if (key) {
+                return $translate.instant(key);
+            }
+            return key;
+        };
+        return T;
+    }]);
+    bmsApp.config(['$translateProvider', function ($translateProvider) {
+        if (!window.localStorage.lang) {
+            // $translateProvider.determinePreferredLanguage();//首选浏览器语言
+            $translateProvider.preferredLanguage(system_lang);//首选自定义语言
+        } else {
+            var lang = window.localStorage.lang;
+            $translateProvider.preferredLanguage(lang);
+        }
+        $translateProvider.useStaticFilesLoader({
+            files: [{
+                prefix: './i18n/locale_',
+                suffix: '.json'
+            }]
+        });
+        $translateProvider.registerAvailableLanguageKeys(['en_US', 'en_UK', 'zh_CN', 'zh_HK'], {
+            'en_US': 'en_US',
+            'en_UK': 'en_US',
+            'zh_CN': 'zh_CN',
+            'zh_HK': 'zh_HK'
+        });
+        $translateProvider.fallbackLanguage('zh_CN');//系统找不到语言的时候
+    }]);
+    //网络相关请求配置
     bmsApp.config(['$httpProvider', function ($httpProvider) {
         $httpProvider.interceptors.push(['$q', '$rootScope', function ($q, $rootScope) {
             return {
                 'request': function (config) {
-                    config.tmeout = 60000;
+                    config.timeout = 60000;
                     config.headers['X-Requested-With'] = 'XMLHttpRequest';
                     return config;
                 },
                 'requestError': function (rejection) {
-                    $rootScope.alert.alert({type: "danger", msg: "数据请求失败，请稍后重试"});
+                    $rootScope.alert.alert({type: 'danger', msg: '数据请求失败，请稍后重试。'});
                     return $q.reject(rejection);
                 },
                 'response': function (response) {
@@ -22,6 +65,12 @@
                 'responseError': function (rejection) {
                     if (rejection && !isNaN(rejection.status) && rejection.status.toString().charAt(0) == 4) {
                         //TODO 根据不同的Status Code做不同的提示 http://baike.baidu.com/subview/1790469/1790469.htm
+                        //401跳转到登录页
+                        // if(rejection.status == 401){
+                        //     if(!window.location.hash.startsWith("#/signin")){
+                        //         window.location.href = "/";
+                        //     }
+                        // }
                     } else {
                         if (angular.isDefined(rejection.status)) {
                             $rootScope.alert.alert({type: 'danger', msg: '服务器错误，请稍后重试。(' + rejection.status + ')'});
@@ -29,10 +78,13 @@
                     }
                     return $q.reject(rejection);
                 }
-            }
-        }])
+            };
+        }]);
     }]);
+    //Rest Client配置
     bmsApp.config(['$resourceProvider', function ($resourceProvider) {
+        //Don't strip trailing slashes from calculated URLs
+        //删除末尾斜杠
         $resourceProvider.defaults.stripTrailingSlashes = false;
         $resourceProvider.defaults.actions = {
             insert: {method: 'POST'},
@@ -46,6 +98,39 @@
             getAll: {method: 'GET', isArray: true}
         };
     }]);
+    /** bms main ctrl---------------------------------------------------------------------------------- */
+    bmsApp.controller('BmsCtrl', ['$scope', '$rootScope', '$state', '$translate', function ($scope, $rootScope, $state, $translate) {
+        $scope.langs = [
+            {id: 0, name: "简体中文", label: 'zh_CN'},
+            {id: 1, name: "繁體中文", label: 'zh_HK'},
+            {id: 2, name: "English", label: 'en_US'}
+        ];
+
+        $scope.browser = angular.getBrowser();
+
+        $scope.selectDef = function (lang) {
+            $rootScope.systemLang = lang.label;
+            $translate.use(lang.label);
+            window.localStorage.lang = lang.label;
+            window.location.reload();
+        }
+        for (var i = 0; i < $scope.langs.length; i++) {
+            if (!window.localStorage.lang) {
+                var sysLang = $translate.proposedLanguage();
+                var sysLangUpper = sysLang.toUpperCase();
+                var ourLangUpper = $scope.langs[i].label.toUpperCase();
+                if (ourLangUpper === sysLangUpper) {
+                    $scope.curLang = $scope.langs[i].name;
+                }
+            } else {
+                if ($scope.langs[i].label === window.localStorage.lang) {
+                    $scope.curLang = $scope.langs[i].name;
+                }
+            }
+        }
+        $scope.footerCompany = footerCompany;
+    }]);
+
     bmsApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise('/');
         //angular.forEach(window.menuData, function (menu) {
@@ -80,12 +165,13 @@
             }
         });
     }]);
-    bmsApp.run(['$rootScope', '$state', '$stateParams', 'authorization', 'principal', 'AuthService', function ($rootScope, $state, $stateParams, authorization, principal, authService) {
+
+    bmsApp.run(['$rootScope', '$state', '$stateParams', 'authorization', 'principal', 'AuthService', 'T', function ($rootScope, $state, $stateParams, authorization, principal, authService, T) {
+
         $rootScope.range = angular.range;
         $rootScope.toNgStyle = angular.toNgStyle;
 
         $rootScope.signout = authService.signout;
-
         //右下角信息提示
         $rootScope.alert = {
             alerts: [],
@@ -94,10 +180,10 @@
                     type: 'info',
                     dismissOnTimeout: 5000
                 }, params);
-                this.alert.unshift(params);
+                this.alerts.unshift(params);
             },
             close: function (index) {
-                this.alert.splice(index, 1);
+                this.alerts.splice(index, 1)
             }
         };
         //菜单
@@ -110,11 +196,15 @@
             },
             leftSub: {
                 items: []
-            }
+            },
         };
-        //url变化监听
-        (function () {
+
+        debugger
+        //state change listener
+        (function ()    {
             $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams, fromState) {
+                debugger
+                console.log("ChangeStart");
                 $rootScope.toState = toState;
                 $rootScope.toStateParams = toStateParams;
                 if (principal.isIdentityResolved()) {
@@ -124,18 +214,24 @@
             $rootScope.$on('$viewContentLoading', function (event, viewConfig) {
             });
             $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+                console.log("ChangeSuccess");
                 $rootScope.currentState = toState;
+
+
                 (function () {
+
                     var headerNavs = [],
-                        leftNavs = [], leftSubNavs = [],
+                        leftNavs = [],
+                        leftSubNavs = [],
                         currentMenu = getMenu(toState.name);
 
-                    //先重置所有的激活状态
+                    //先重置所有激活的状态
                     (function resetState() {
                         for (var i = 0; i < window.menuData.length; i++) {
                             window.menuData[i].active = false;
                         }
                     })();
+
                     //根据stateName获取state对象
                     function getMenu(name) {
                         for (var i = 0; i < window.menuData.length; i++) {
@@ -167,15 +263,30 @@
                                                 if (!(menu.forceHide === true || menu.forceShow === false)) {
                                                     leftNavs.push(menu);
                                                 }
+
+                                                /*//获取四级菜单，当前选中的三级菜单的子菜单
+                                                 if (currentMenu.parent === menu.name) {
+                                                 angular.forEach(window.menuData, function (subMenu) {
+                                                 if (subMenu.parent === menu.name) {
+                                                 if (currentMenu === subMenu) {
+                                                 subMenu.active = true;
+                                                 }
+                                                 if (!(subMenu.forceHide === true || subMenu.forceShow === false)) {
+                                                 leftSubNavs.push(subMenu);
+                                                 }
+                                                 }
+                                                 });
+                                                 }*/
                                             }
                                         });
+
                                     }
                                     break;
                                 }
                             }
                             if (parent === null) {
                                 return null;
-                            } else if (parent.name === 'm') {
+                            } else if (parent.name === "m") {
                                 return menu;
                             } else {
                                 return getMx(parent);
@@ -197,7 +308,7 @@
                                         headerNavs.push(menu);
                                     }
                                 }
-                            })
+                            });
                         }
                     }
                     $rootScope.nav.header.items = headerNavs;
@@ -212,10 +323,11 @@
                             }
                         }
                     }
-                    document.title = "待完善";
-                    //注入state层的默认值
+                    document.title = T.T(currentMenu.label);
+
+                    //注入state重的默认值
                     for (var key in toParams || {}) {
-                        var paramsCache = angular.fromJson(window.localStorage.getItem("_PARAMS_")) || {};
+                        var paramsCache = angular.fromJson(window.localStorage.getItem("__PARAMS__")) || {};
                         //当参数没有值时，先从本次缓存中获取参数，不存在再从菜单配置中获取默认值
                         if (toParams[key] === undefined) {
                             if (paramsCache[key] !== undefined) {
@@ -226,15 +338,18 @@
                         } else {
                             //当菜单有值时，将其缓存到localStorage
                             paramsCache[key] = toParams[key];
-                            window.localStorage.setItem("_PARAMS_", angular.toJson(paramsCache))
+                            window.localStorage.setItem("__PARAMS__", angular.toJson(paramsCache));
                         }
                     }
+                    // console.log(document.getElementById('allbody').clientHeight);
                 })();
+
             });
             $rootScope.$on('$viewContentLoaded', function (event, loadedState) {
+
             });
             $rootScope.$on('$stateNotFound', function (event, unfoundState, fromState, fromParams) {
             });
-        })();
+        })()
     }]);
 })(window, angular);

@@ -7,6 +7,11 @@ bower_components
 *.jar
 src/main/gen
 src/main/java/com/mybatis/auth/domain
+css
+i18n
+images
+styles
+db
 
 
 

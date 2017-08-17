@@ -1,12 +1,13 @@
 /**
- * Created by cuiyy on 2017/6/28.
+ * Created by zhe on 02/11/2016.
  */
-(function (window, angular) {
+;(function (window, angular) {
+    'use strict';
 
     function uuid() {
         var d = new Date().getTime();
         if (window.performance && typeof window.performance.now === "function") {
-            d += performance.now();
+            d += performance.now(); //use high-precision timer if available
         }
         var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             var r = (d + Math.random() * 16) % 16 | 0;
@@ -187,6 +188,7 @@
         generalDateFormat_HHmmss: 'HH:mm:ss',
         generalDateFormat_HHmmssSSS: 'HH:mm:ss.sss'
     };
+
     angular.extend(angular, {
         'uuid': uuid,
         'contains': contains,
@@ -204,4 +206,5 @@
         'getBrowser': getBrowser,
         'dateFormat': dateFormat
     })
-})();
+
+})(window, angular);

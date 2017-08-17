@@ -71,16 +71,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         }
         urlRegistry.anyRequest().authenticated();
         http.csrf().disable();
-        // http.exceptionHandling().authenticationEntryPoint(authEntryPoint);
         http.headers().frameOptions().sameOrigin();
         http.formLogin()
                 .loginProcessingUrl("/signin")
                 .loginPage("/index.html")
                 .usernameParameter("username")
                 .passwordParameter("password");
-        // .successHandler(authSuccessHandler)
-        // .failureHandler(authFailureHandler);
-
         http.logout()
                 .logoutUrl("/signout")
                 .deleteCookies("remember-me")

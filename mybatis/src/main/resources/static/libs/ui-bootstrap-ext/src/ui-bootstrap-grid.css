@@ -1,0 +1,17 @@
+.uib-grid {
+}
+
+.uib-grid .uib-grid-item {
+    cursor: pointer;
+    float: left;
+    margin: 0 auto;
+    text-align: center;
+}
+.uib-grid .uib-grid-item.active {
+    background: rgba(73, 116, 139, .1);
+}
+.uib-grid .uib-grid-item:after{
+    content: " ";
+    clear: both;
+    display: block;
+}

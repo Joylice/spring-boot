@@ -54,14 +54,15 @@ public class MenuService extends BaseService<Menu> {
             if (menu.getCls() != null) {
                 objectNode.put("cls", menu.getCls());
             }
-
+            //此处对abstract的逻辑处理有别于Postgres数据库
+            // （mysql数据库会将程序中的true、false以1、0的形式存储到数据库）
             String _abstract = menu.getAbstraction();
             if (_abstract != null) {
                 switch (_abstract) {
-                    case "true":
+                    case "1":
                         objectNode.put("abstract", true);
                         break;
-                    case "false":
+                    case "0":
                         objectNode.put("abstract", false);
                         break;
                     default:

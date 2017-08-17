@@ -1,7 +1,8 @@
 /**
- * Created by cuiyy on 2017/6/28.
+ * Created by zhe on 7/14/16.
  */
-(function (window, angular) {
+;(function (window, angular) {
+    'use strict';
     var core = angular.module("core");
 
     core.service('AuthService', ['$rootScope', '$state', 'principal', '$http', function ($rootScope, $state, principal, $http) {
@@ -25,6 +26,6 @@
                 principal.deauthenticate();
                 $state.go('signin');
             }
-        };
+        }
     }]);
 })(window, angular);

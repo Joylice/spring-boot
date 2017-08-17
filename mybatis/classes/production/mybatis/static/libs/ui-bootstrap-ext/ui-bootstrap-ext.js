@@ -1,0 +1,5 @@
+;(function (window, angular) {
+    'use strict';
+    angular.module("ui.bootstrap.ext.tpls", ["uib/template/select.html", "uib/template/tree.html", "uib/template/formBuilder.html", "uib/template/formField.html", "uib/template/formShow.html", "uib/template/formList.html","uib/template/datetimepickerPopup/popup.html","uib/template/timepicker/clockpicker.html","uib/template/mydate/datepicker.html","uib/template/mydate/popup.html","uib/template/mydate/month.html","uib/template/mydate/year.html",]);
+    angular.module("ui.bootstrap.ext", ["ui.bootstrap.ext.tpls", "ui.bootstrap.position", "ui.bootstrap.nav", "ui.bootstrap.select", "ui.bootstrap.grid", "ui.bootstrap.tree", "ui.bootstrap.formBuilder", "ui.bootstrap.formField", "ui.bootstrap.formShow", "ui.bootstrap.formList", "ui.bootstrap.thumb","ui.bootstrap.datetimepickerPopup","ui.bootstrap.mydate","ui.bootstrap.mydatepicker","ui.bootstrap.ismyClass","ui.bootstrap.table","ui.bootstrap.button","ui.bootstrap.formPreview",'ui.bootstrap.addTableItem']);
+})(window, angular);
