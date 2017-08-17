@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MybatisApplication {
 
     public static void main(String[] args) {
+        System.setProperty("spring.devtools.restart.enabled", "false");
         SpringApplication.run(MybatisApplication.class, args);
     }
 }
