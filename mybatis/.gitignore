@@ -1,6 +1,7 @@
 .log
 .gradle
 /build
+/classes
 .idea
 /gradle
 bower_components
